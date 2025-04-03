@@ -1,52 +1,25 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Periksa;
-use App\Models\DetailPeriksa;
-use App\Models\Obat;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasienController;
+use App\Http\Controllers\DokterController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
+// routes untuk authentication login/register
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/register', function () {
-    return view('auth.register');
-});
+//routes untuk role pasien
+Route::get('/pasien', [PasienController::class, 'index'])->name('dashboardPasien');
+Route::get('/pasien/periksa', [PasienController::class, 'showPeriksa'])->name('periksaPasien');
 
-Route::get('/dokter', function () {
-    $periksas = Periksa::all(); 
-    $obats = Obat::all(); 
-    return view('dokter.dashboard', compact('periksas', 'obats'));
-});
-
-Route::get('/dokter/obat', function () {
-    $obats = Obat::all(); 
-    return view('dokter.obat', compact('obats'));
-});
-
-Route::get('/dokter/periksa', function () {
-    $periksas = Periksa::all(); 
-    $obats = Obat::all();
-    return view('dokter.periksa', compact('periksas', 'obats'));
-});
-
-
-
-Route::get('/pasien', function () {
-    $periksas = Periksa::all(); 
-    return view('pasien.dashboard', compact('periksas'));
-});
-Route::get('/pasien/periksa', function () {
-    $periksas = Periksa::all(); 
-    return view('pasien.periksa', compact('periksas'));
-});
-
-Route::get('/pasien/riwayat', function () {
-    $Detailperiksas = DetailPeriksa::all(); 
-    $periksas = Periksa::all();
-    return view('pasien.riwayat', compact('Detailperiksas', 'periksas'));
-});
+//routes untuk role dokter
+Route::get('/dokter', [DokterController::class, 'index'])->name('dashboardDokter');
+Route::get('/dokter/periksa', [DokterController::class, 'showPeriksa'])->name('periksaDokter');
+Route::get('/dokter/obat', [DokterController::class, 'showObat'])->name('obatDokter');
