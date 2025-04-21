@@ -2,36 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Obat;
+use App\Models\Periksa;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetailPeriksa extends Model
 {
-    use HasFactory;
-
-    // Nama tabel di database (opsional jika tidak sesuai konvensi plural model)
-    protected $table = 'detail_periksas';
-
-    // Kolom yang bisa diisi secara massal
     protected $fillable = [
         'id_periksa',
         'id_obat',
     ];
 
     /**
-     * Relasi Many to One ke model Periksa
-     * Banyak detail_periksas bisa dimiliki satu periksa
+     * Relasi ke tabel Periksa
      */
-    public function periksa()
+    public function periksa(): BelongsTo
     {
         return $this->belongsTo(Periksa::class, 'id_periksa');
     }
 
     /**
-     * Relasi Many to One ke model Obat
-     * Banyak detail_periksas bisa memiliki satu obat
+     * Relasi ke tabel Obat
      */
-    public function obat()
+    public function obat(): BelongsTo
     {
         return $this->belongsTo(Obat::class, 'id_obat');
     }
